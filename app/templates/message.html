@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link  rel="stylesheet" href="../static/css/main.css" />
+		<link rel="stylesheet" type="text/css" href="../static/css/sinafaceandeffec.css" />
+		<script type="text/javascript" src="../static/js/jquery-1.8.0.min.js"></script>
+		<title>多种表情评论留言框 - 代码库</title> 
+        <meta name="keywords" content="表情,评论,留言" />
+        <meta name="description" content="非常漂亮的带多种表情评论留言框。" />
+	</head>
+<!--/************************************************************
+ *																*
+ * 						      代码库							*
+ *                        www.dmaku.com							*
+ *       		  努力创建完善、持续更新插件以及模板			*
+ * 																*
+**************************************************************-->
+	<body>
+	<br/>
+		<div id="content" style="width: 700px; height: auto;margin: auto;">
+			<div class="wrap">
+				<div class="comment">
+					<div class="head-face">
+						<img src="pictures/1.jpg" / >
+						<p>我是鸟</p>
+					</div>
+					<div class="content">
+						<div class="cont-box">
+							<textarea class="text" placeholder="请输入..."></textarea>
+						</div>
+						<div class="tools-box">
+							<div class="operator-box-btn"><span class="face-icon"  >☺</span><span class="img-icon">▧</span></div>
+							<div class="submit-btn"><input type="button" onClick="out()"value="提交评论" /></div>
+						</div>
+					</div>
+				</div>
+				<div id="info-show">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../static/js/main.js"></script>
+	<script type="text/javascript" src="../static/js/sinafaceandeffec.js"></script>
+	<script type="text/javascript">
+		// 绑定表情
+		$('.face-icon').SinaEmotion($('.text'));
+		// 测试本地解析
+		function out() {
+			var inputText = $('.text').val();
+			$('#info-show ul').append(reply(AnalyticEmotion(inputText)));
+		}
+		
+		var html;
+		function reply(content){
+			html  = '<li>';
+			html += '<div class="head-face">';
+			html += '<img src="pictures/1.jpg" / >';
+			html += '</div>';
+			html += '<div class="reply-cont">';
+			html += '<p class="username">小小红色飞机</p>';
+			html += '<p class="comment-body">'+content+'</p>';
+			html += '<p class="comment-footer">2016年10月5日　回复　点赞54　转发12</p>';
+			html += '</div>';
+			html += '</li>';
+			return html;
+		}
+	</script>
+</html>

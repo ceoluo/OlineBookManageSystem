@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="../static/css/pintuer.css">
+<link rel="stylesheet" href="../static/css/admin.css">
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/pintuer.js"></script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder"> 内容列表</strong> <a href="" style="float:right; display:none;">添加字段</a></div>
+    <div class="padding border-bottom">
+      <ul class="search" style="padding-left:10px;">
+        <li> <a class="button border-main icon-plus-square-o" href="add.html"> 添加内容</a> </li>
+        <li>搜索：</li>
+        <li>首页
+          <select name="s_ishome" class="input" onchange="changesearch()" style="width:60px; line-height:17px; display:inline-block">
+            <option value="">选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+          </select>
+          &nbsp;&nbsp;
+          推荐
+          <select name="s_isvouch" class="input" onchange="changesearch()"  style="width:60px; line-height:17px;display:inline-block">
+            <option value="">选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+          </select>
+          &nbsp;&nbsp;
+          置顶
+          <select name="s_istop" class="input" onchange="changesearch()"  style="width:60px; line-height:17px;display:inline-block">
+            <option value="">选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+          </select>
+        </li>
+        <if condition="$iscid eq 1">
+          <li>
+            <select name="cid" class="input" style="width:200px; line-height:17px;" onchange="changesearch()">
+              <option value="">请选择分类</option>
+              <option value="">产品分类</option>
+              <option value="">产品分类</option>
+              <option value="">产品分类</option>
+              <option value="">产品分类</option>
+            </select>
+          </li>
+        </if>
+        <li>
+          <input type="text" placeholder="请输入搜索关键字" id="keyword" name="keyword" class="input" style="width:250px; line-height:17px;display:inline-block" />
+          <a href="javascript:void(0)" class="button border-main icon-search" onclick="changesearch()" > 搜索</a></li>
+      </ul>
+    </div>
+    <table class="table table-hover text-center">
+      <tr>
+        <th width="60" style="text-align:left; padding-left:20px;">ID</th>
+        <!-- <th width="10%">排序</th> -->
+        <th>购买用户</th>
+        <th>图书名称</th>
+        <!-- <th>作者</th> -->
+        <th>封面图片</th>
+        <th>价格</th>
+        <th>付款方式</th>
+        <th>联系方式</th>
+        <th>发货方式</th>
+        <th>收货地址</th>
+        <th>下单时间</th>
+        <th>备注</th>
+        <th width="180">操作</th>
+      </tr>
+        {% with pay_type={0:'在线支付',1:'货到付款'},send_type={0:'顺丰快递',1:'申通快递',2:'圆通快递',3:'国通快递',4:'韵达快递',5:'邮政快递'} %}
+        {% for order_info in orders_info  %}
+        <tr>
+          <td style="text-align:left; padding-left:20px;">{{ order_info['id'] }}</td>
+          <td>{{ order_info['buyer'] }}</td>
+          <td>{{ order_info['name'] }}</td>
+          <!-- <td><font color="#00CC99">首页</font></td> -->
+          <td width="10%"><img src="{{ url_for('static',filename='images/book_img/'+order_info['cover_img']) }}" alt="" width="" height="80" /></td>
+          <td>{{ order_info['price'] }}</td>
+          <td>{{ pay_type[order_info['pay_type']] }}</td>
+          <td>{{ order_info['phone'] }}</td>
+          <td>{{ send_type[order_info['send_type']] }}</td>
+          <td>{{ order_info['receive_address'] }}</td>
+          <!-- <td><input type="text" name="sort[1]" value="1" style="width:50px; text-align:center; border:1px solid #ddd; padding:7px 0;" /></td> -->
+          <td>{{ order_info['order_date'] }}</td>
+          <td>{{ order_info['other'] }}</td>
+          <td><div class="button-group"> <a class="button border-main" href="add.html"><span class="icon-edit"></span> 修改</a> <a class="button border-red" href="javascript:void(0)" onclick="return del({{ order_info['id'] }})"><span class="icon-trash-o"></span> 删除</a> </div></td>
+        </tr>
+    {% endfor %}
+    {% endwith %}
+    </table>
+      <!-- <tr> -->
+        <!-- <td colspan="8"> --><div class="pagelist"> {% if cur_page<2 %}
+            <a href="{{ url_for('main.order_list', cur_page=cur_page-1) }}" style="display: none">上一页</a>
+            {% endif %}
+        {% with foo = 1 %}
+            {% for page in range(1,page_num+foo) %}
+                {% if page == cur_page  %}
+                    <span class="current">{{ cur_page }}</span>
+                {% else %}
+                <a href="{{ url_for('main.order_list', cur_page=page) }}">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if cur_page>=2 %}
+            <a href="{{ url_for('main.order_list', cur_page=cur_page+foo) }}">下一页</a>
+            {% endif %}
+            <a href="{{ url_for('main.order_list', cur_page=page_num) }}">尾页</a> </div></td>
+      {% endwith %}</div><!-- </td> -->
+      <!-- </tr> -->
+  </div>
+</form>
+<script type="text/javascript">
+
+//搜索
+function changesearch(){
+    var keyword = document.getElementById("keyword").value;
+    window.open("{{ url_for('main.query_order') }}"+"?keyword="+keyword,name="right");
+}
+
+//单个删除
+function del(id){
+	if(confirm("您确定要删除吗?")){
+	    $.ajax({
+            url: "{{ url_for('main.delete_order') }}",
+            data: {order_id: id},
+            type: "GET",
+            //dataType: "json",
+            success: function(data) {
+                location.reload(true);
+            }
+        });
+
+{#		$.get(#}
+{#            "{{ url_for('main.delete_order') }}",#}
+{#            {order_id: id},#}
+{#            function() {#}
+{#                location.reload(true);#}
+{#                window.location.href="{{ url_for('main.order_list') }}";#}
+{#            },#}
+{#            "json"#}
+{#        );#}
+	}
+}
+
+//全选
+$("#checkall").click(function(){ 
+  $("input[name='id[]']").each(function(){
+	  if (this.checked) {
+		  this.checked = false;
+	  }
+	  else {
+		  this.checked = true;
+	  }
+  });
+})
+
+//批量删除
+function DelSelect(){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){
+		var t=confirm("您确认要删除选中的内容吗？");
+		if (t==false) return false;		
+		$("#listform").submit();		
+	}
+	else{
+		alert("请选择您要删除的内容!");
+		return false;
+	}
+}
+
+//批量排序
+function sorts(){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){	
+		
+		$("#listform").submit();		
+	}
+	else{
+		alert("请选择要操作的内容!");
+		return false;
+	}
+}
+
+
+//批量首页显示
+function changeishome(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){
+		
+		$("#listform").submit();	
+	}
+	else{
+		alert("请选择要操作的内容!");		
+	
+		return false;
+	}
+}
+
+//批量推荐
+function changeisvouch(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){
+		
+		
+		$("#listform").submit();	
+	}
+	else{
+		alert("请选择要操作的内容!");	
+		
+		return false;
+	}
+}
+
+//批量置顶
+function changeistop(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){		
+		
+		$("#listform").submit();	
+	}
+	else{
+		alert("请选择要操作的内容!");		
+	
+		return false;
+	}
+}
+
+
+//批量移动
+function changecate(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){		
+		
+		$("#listform").submit();		
+	}
+	else{
+		alert("请选择要操作的内容!");
+		
+		return false;
+	}
+}
+
+//批量复制
+function changecopy(o){
+	var Checkbox=false;
+	 $("input[name='id[]']").each(function(){
+	  if (this.checked==true) {		
+		Checkbox=true;	
+	  }
+	});
+	if (Checkbox){	
+		var i = 0;
+	    $("input[name='id[]']").each(function(){
+	  		if (this.checked==true) {
+				i++;
+			}		
+	    });
+		if(i>1){ 
+	    	alert("只能选择一条信息!");
+			$(o).find("option:first").prop("selected","selected");
+		}else{
+		
+			$("#listform").submit();		
+		}	
+	}
+	else{
+		alert("请选择要复制的内容!");
+		$(o).find("option:first").prop("selected","selected");
+		return false;
+	}
+}
+
+</script>
+</body>
+</html>

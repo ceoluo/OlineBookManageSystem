@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BOOK+</title>
+<meta name="keywords" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="description" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../static/css/base.css" rel="stylesheet">
+<link href="../static/css/index.css" rel="stylesheet">
+<link href="../static/css/m.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementsByTagName("h2")[0];
+	var oUl = document.getElementsByTagName("ul")[0];
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+   <div class="logo"><a href="/">BOOK+</a></div>
+    <div id="mnav">
+      <h2><span class="navicon"></span></h2>
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登陆/注册</a></li>
+          {% else %}
+          <li><a href="#">欢迎您！{{ session.get('username')[:5] }}</a> <a href="{{ url_for('users.logout') }}" style="color: red">【注销】</a></li>
+          {% endif %}
+      </ul>
+    </div>
+    <nav class="topnav" id="topnav">
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登陆/注册</a></li>
+          {% else %}
+          <li><a href="#">欢迎您！{{ session.get('username')[:5] }}</a> <a href="{{ url_for('users.logout') }}" style="color: red">【注销】</a></li>
+          {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+<article>
+  <h1 class="t_nav">读万卷书，行万里路！</h1>
+  <div class="picbox">
+      {% for book_info in books_info %}
+          <ul>
+      <li><a href="{{ url_for('users.order_book', id=book_info['id']) }}"><i><img src="{{ url_for('static',filename='images/book_img/'+book_info['cover_img']) }}"></i>
+        <div class="picinfo">
+          <h3>《{{ book_info['name'] }}》</h3>
+          <span>{{ book_info['description'] }}</span> </div>
+        </a>
+      </li>
+
+      </ul>
+      {% endfor %}
+      <div class="blank"></div>
+{#    <div class="pagelist"><a title="Total record">&nbsp;<b>45</b> </a>&nbsp;&nbsp;&nbsp;<b>1</b>&nbsp;<a href="/download/index_2.html">2</a>&nbsp;<a href="/download/index_2.html">下一页</a>&nbsp;<a href="/download/index_2.html">尾页</a></div>#}
+  </div>
+  <div class="sidebar">
+   <div class="search">
+      <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
+        <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字'}" type="text">
+        <input name="show" value="title" type="hidden">
+        <input name="tempid" value="1" type="hidden">
+        <input name="tbname" value="news" type="hidden">
+        <input name="Submit" class="input_submit" value="搜索" type="submit">
+      </form>
+    </div>
+
+    <div class="cloud">
+      <h2 class="hometitle">文学泰斗</h2>
+      <ul>
+        <a href="/">莎士比亚</a> <a href="/"> 列夫·托尔斯泰</a> <a href="/">html5</a> <a href="/">李清照</a> <a href="/">雨果</a> <a href="/">荷马 </a> <a href="/">歌德</a> <a href="/">鲁迅</a><a href="/">安徒生</a> <a href="/">高尔基</a> <a href="/">狄更斯</a> <a href="/">马克吐温</a>
+      </ul>
+    </div>
+
+    <div class="weixin">
+      <h2 class="hometitle">店长微信</h2>
+      <ul>
+        <img src="../static/images/dzwx.jpg">
+      </ul>
+    </div>
+  </div>
+</article>
+<footer>
+  <p><a href="/">BOOK+ </a> <a href="/">西华大学-计算机与软件工程学院-数据库实训</a></p>
+</footer>
+<script src="js/nav.js"></script>
+</body>
+</html>

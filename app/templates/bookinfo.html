@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>BOOK+</title>
+    <meta name="keywords" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="description" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../static/css/base.css" rel="stylesheet">
+<link href="../static/css/index.css" rel="stylesheet">
+<link href="../static/css/m.css" rel="stylesheet">
+<link  rel="stylesheet" href="../static/css/main.css" />
+
+    <link rel="stylesheet" type="text/css" href="../static/css/sinafaceandeffec.css" />
+		<script type="text/javascript" src="../static/js/jquery-1.8.0.min.js"></script>
+    <style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #F7F7F7;
+		}
+
+		form {
+			max-width: 640px;
+			width: 100%;
+			margin: 24px auto;
+			font-size: 25px;
+		}
+
+		label {
+			display: block;
+			margin: 10px 10px 15px;
+			font-size: 24px;
+		}
+
+		input {
+			display: block;
+			width: 100%;
+			height: 40px;
+			font-size: 22px;
+			margin-top: 10px;
+			padding: 6px 10px;
+			color: #333;
+			border: 1px solid #CCC;
+			box-sizing: border-box;
+		}
+
+		meter, progress {
+			display: block;
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		.btn {
+			margin-top: 30px;
+		}
+
+		.btn input {
+			color: #FFF;
+			background-color: green;
+			border: 0 none;
+			outline: none;
+			cursor: pointer;
+		}
+
+	</style>
+
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementsByTagName("h2")[0];
+	var oUl = document.getElementsByTagName("ul")[0];
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+    <div class="logo"><a href="/">BOOK+</a></div>
+    <div id="mnav">
+      <h2><span class="navicon"></span></h2>
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登陆/注册</a></li>
+          {% else %}
+          <li><a href="#">欢迎您！{{ session.get('username')[:5] }}</a> <a href="{{ url_for('users.logout') }}" style="color: red">【注销】</a></li>
+          {% endif %}
+      </ul>
+    </div>
+    <nav class="topnav" id="topnav">
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登陆/注册</a></li>
+          {% else %}
+          <li><a href="#">欢迎您！{{ session.get('username')[:5] }}</a> <a href="{{ url_for('users.logout') }}" style="color: red">【注销】</a></li>
+          {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+<article>
+  <h1 class="t_nav"><span>读书是对自己最好的投资</span><a href="/" class="n1">网站首页</a></h1>
+  <div class="infos">
+
+    <div class="newsview">
+      <h3 class="news_title">《{{ book_info['name'] }}》</h3>
+      <div class="news_author"><span class="au01"><a href="">作者：{{ book_info['author'] }}</a><span class="au03">价格：<b style="color: red">{{ book_info['price'] }}</b></span></div>
+      <div class="tags"><a href="" target="_blank">{{ book_info['category_name'] }}</a></div>
+        <div class="otherlink">
+      <h2>订单填写</h2>
+                {% if code!=1 %}
+<form method="post" action="{{ url_for('users.order_book',id=book_info['id']) }}">
+    <fieldset>
+    {% if msg != 200 %}
+        <legend style="color: red">{{ msg }}</legend>
+    {% else %}
+        <legend>订单信息</legend>
+    {% endif %}
+        <input type="hidden" name="id" value="{{ book_info['id'] }}" >
+            <label for="">
+				* 付款方式:
+				<select id="pay_type" name="pay_type" style="width: 100%; height: 40px; font-size: 20px">
+					<option value="0">在线支付</option>
+					<option value="1">货到付款</option>
+				</select>
+			</label>
+            <label for="">
+				* 发货方式:
+				<select id="send_type" name="send_type" style="width: 100%; height: 40px; font-size: 20px">
+					<option value="0">顺丰快递</option>
+					<option value="1">申通快递</option>
+					<option value="2">圆通快递</option>
+					<option value="3">国通快递</option>
+					<option value="4">韵达快递</option>
+					<option value="5">邮政快递</option>
+				</select>
+			</label>
+
+			<label for="">
+				* 收货地址: <input type="text" name="receive_address" required autofocus placeholder="请输入收货地址">
+			</label>
+
+            <label for="">
+				备注: <input type="text" name="other" autofocus placeholder="备注信息">
+			</label>
+
+			<label for="" class="btn">
+				<input type="submit" value="确认购买">
+			</label>
+
+		</fieldset>
+	</form>
+        {% else %}
+        <a style="text-align: center; color: red; font-size: xx-large">{{ msg }}</a>
+        {% endif %}
+	<script>
+		var score = document.getElementById('score');
+		var level = document.getElementById('level');
+
+		score.oninput = function () {
+			level.value = this.value;
+		}
+	</script>
+            <div class="news_pl">
+      <h2>图文详情</h2>
+    </div>
+    </div>
+        <br>
+            <img alt="" style="margin-left: auto; margin-right: auto; display: block;" src="{{ url_for('static',filename='images/book_img/'+book_info['cover_img']) }}">
+        <br>
+      <div class="news_about" style="font-size: large"><strong>简介: </strong></div>
+      <div class="news_infos" style="font-size: larger">{{ book_info['description'] }}</div>
+
+    </div>
+
+    <div class="news_pl">
+      <h2>图书评论</h2>
+	<br/>
+		<div id="content" style="width: 700px; height: auto;margin: auto;">
+			<div class="wrap">
+				<div class="comment">
+					<div class="head-face">
+						<img src="../static/images/user_img/head_img.png" / >
+						<p>BOOK+</p>
+					</div>
+					<div class="content">
+						<div class="cont-box">
+							<textarea class="text" placeholder="请输入..."></textarea>
+						</div>
+						<div class="tools-box">
+							<div class="operator-box-btn"><span class="face-icon"  >☺</span><span class="img-icon">▧</span></div>
+							<div class="submit-btn"><input type="button" onClick="out()"value="提交评论" /></div>
+						</div>
+					</div>
+				</div>
+				<div id="info-show">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <br>
+    <div class="cloud">
+      <h2 class="hometitle">标签云</h2>
+      <ul>
+        <a href="/">莎士比亚</a> <a href="/"> 列夫·托尔斯泰</a> <a href="/">html5</a> <a href="/">李清照</a> <a href="/">雨果</a> <a href="/">荷马 </a> <a href="/">歌德</a> <a href="/">鲁迅</a><a href="/">安徒生</a> <a href="/">高尔基</a> <a href="/">狄更斯</a> <a href="/">马克吐温</a>
+      </ul>
+    </div>
+    <div class="paihang">
+      <h2 class="hometitle">店长推荐</h2>
+      <ul>
+        {% for book_info in book_recommand_list %}
+        <li><b><a href="{{ url_for('users.order_book', id=book_info['id']) }}" target="_blank">《{{ book_info['name'] }}》</a></b>
+          <p><i><img src="{{ url_for('static',filename='images/book_img/'+book_info['cover_img']) }}"></i>{{ book_info['description'][:50]+'...' }}</p>
+        </li>
+          {% endfor %}
+      </ul>
+    </div>
+    <div class="weixin">
+      <h2 class="hometitle">店长微信</h2>
+      <ul>
+        <img src="../static/images/dzwx.jpg">
+      </ul>
+    </div>
+  </div>
+</article>
+<footer>
+  <p><a href="/">BOOK+ </a> <a href="/">西华大学-计算机与软件工程学院-数据库实训</a></p>
+</footer>
+
+<script type="text/javascript" src="../static/js/main.js"></script>
+<script type="text/javascript" src="../static/js/sinafaceandeffec.js"></script>
+	<script type="text/javascript">
+		// 绑定表情
+		$('.face-icon').SinaEmotion($('.text'));
+		// 测试本地解析
+		function out() {
+			var inputText = $('.text').val();
+			$('#info-show ul').append(reply(AnalyticEmotion(inputText)));
+		}
+
+		var html;
+		function reply(content){
+			html  = '<li>';
+			html += '<div class="head-face">';
+			html += '<img src="pictures/1.jpg" / >';
+			html += '</div>';
+			html += '<div class="reply-cont">';
+			html += '<p class="username">小小红色飞机</p>';
+			html += '<p class="comment-body">'+content+'</p>';
+			html += '<p class="comment-footer">2016年10月5日　回复　点赞54　转发12</p>';
+			html += '</div>';
+			html += '</li>';
+			return html;
+		}
+    </script>
+
+<script src="../static/js/nav.js"></script>
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(function() {
+    var elm = jQuery('#left_flow2'); 
+    var startPos = jQuery(elm).offset().top; 
+    jQuery.event.add(window, "scroll", function() { 
+        var p = jQuery(window).scrollTop(); 
+        jQuery(elm).css('position',((p) > startPos) ? 'fixed' : ''); 
+
+        jQuery(elm).css('top',((p) > startPos) ? '0' : '');
+    }); 
+});
+
+</script>
+</body>
+</html>

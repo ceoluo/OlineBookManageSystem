@@ -1,0 +1,18 @@
+.logDtip {
+	width: 88%;
+	border-bottom: 1px solid #ee7700;
+	margin: 0px auto;
+	margin-bottom: 40px
+}
+    .logD .p1 {
+	display: inline-block;
+	font-size: 28px;
+	margin-top: 30px;
+}
+    .logDiv .logGet .logD .p2 {
+	display: inline-block;
+	font-size: 14px;
+	margin-top: 45px;
+	float: right;
+	color: #ee7700;
+}

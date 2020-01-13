@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BOOK+</title>
+<meta name="keywords" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="description" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../static/css/base.css" rel="stylesheet">
+<link href="../static/css/index.css" rel="stylesheet">
+<link href="../static/css/m.css" rel="stylesheet">
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementsByTagName("h2")[0];
+	var oUl = document.getElementsByTagName("ul")[0];
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+    <div class="logo"><a href="/">BOOK+</a></div>
+    <div id="mnav">
+      <h2><span class="navicon"></span></h2>
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登录/注册</a></li>
+          {% else %}
+          <li><a href="login.html">{{ session.get('username')[:5] }},欢迎您！</a></li>
+          {% endif %}
+      </ul>
+    </div>
+    <nav class="topnav" id="topnav">
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登陆/注册</a></li>
+          {% else %}
+          <li><a href="#">欢迎您！{{ session.get('username')[:5] }}</a> <a href="{{ url_for('users.logout') }}" style="color: red">【注销】</a></li>
+          {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+<article>
+  <h1 class="t_nav">默默付出，总有收获！</h1>
+  <div class="ab_box">
+    <div class="leftbox">
+      <div class="newsview">
+        <div class="news_infos">
+          <p style="font-size: large">
+              <span style="color: #00aaee">选题要求：</span>
+              <br>
+              系统功能基本要求：书籍信息，包括图书编号、图书种类、图书名称、单价、内容简介等；
+              <br />
+              购书者信息，包括购买编号、姓名、性别、年龄、联系方式购买书的名称等；
+              <br />
+              购买方式，包括付款方式、发货手段等。
+              <br />
+              根据读者信息查询购书情况，将统计结果以报表形式打印输出。<br />
+            <br />
+              <span style="color: #00aaee">系统摘要</span><br>
+            随着互联网的蓬勃发展，人们已经不再满足于信息的浏览和发布，而是渴望着能够充分享受网络所带来的更加多的便利。掌握计算机知识和应用，是培养新型人才的一个重要环节。在众多的数据存储技术中，关系型数据库无疑是最具生命力数据存储技术之一，由于计算机发展带来的新应用的出现，SQL越来越流行。作为支持SQL的关系型数据库，MySQL目前是最流行的关系型数据库管理系统之一，在WEB 应用方面，MySQL是最好的RDBMS (Relational Database Management System，关系数据库管理系统) 应用软件之一。
+本系统尝试用Python Web在网络上架构一个动态的图书馆管理系统，它是在Linux或Windows10下，以MySQL为数据库开发平台，Flask框架提供的网络信息服务作为应用服务器，采用python web技术开发的图书馆管理系统。采用了对象关系映射访问数据库，对象关系映射（Object-Relational Mapping）提供了概念性的、易于理解的模型化数据的方法。ORM方法论基于三个核心原则： 简单：以最基本的形式建模数据。 传达性：数据库结构被任何人都能理解的语言文档化。 精确性：基于数据模型创建正确标准化的结构。 典型地，建模者通过收集来自那些熟悉应用程序但不熟练的数据建模者的人的信息开发信息模型。建模者必须能够用非技术企业专家可以理解的术语在概念层次上与数据结构进行通讯。建模者也必须能以简单的单元分析信息，对样本数据进行处理。ORM专门被设计为改进这种联系。
+主要实现了5个方面的功能：1.登录，分为管理员和普通用户； 3.图书管理，主要实现图书商品的信息的上传、更新、删除；4.订单管理，包括查看用户的订单情况、删除订单等；5.图书分类管理，可以删除或更新本系统中的图书分类。
+
+        </div>
+      </div>
+    </div>
+    <div class="rightbox">
+      <div class="aboutme">
+        <h2 class="hometitle">关于我</h2>
+        <div class="avatar"> <img src="../static/images/user_img/default_img.png"> </div>
+        <div class="ab_con">
+          <p>网名：Young@Man | 罗忠孝</p>
+          <p>职业：程序员鼓励师 </p>
+          <p>个人微信：ceo-727395996</p>
+          <p>邮箱：mrzhongxiao@gmail.com</p>
+        </div>
+      </div>
+      <div class="weixin">
+        <h2 class="hometitle">微信关注</h2>
+        <ul>
+          <img src="../static/images/dzwx.jpg">
+        </ul>
+      </div>
+    </div>
+  </div>
+</article>
+<footer>
+  <p><a href="/">BOOK+ </a> <a href="/">西华大学-计算机与软件工程学院-数据库实训</a></p>
+</footer>
+<script src="js/nav.js"></script>
+</body>
+</html>

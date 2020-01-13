@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BOOK+</title>
+<meta name="keywords" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="description" content="这是一个充满着书香的网站，BOOK+！" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../static/css/base.css" rel="stylesheet">
+<link href="../static/css/index.css" rel="stylesheet">
+<link href="../static/css/m.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<script>
+window.onload = function ()
+{
+	var oH2 = document.getElementsByTagName("h2")[0];
+	var oUl = document.getElementsByTagName("ul")[0];
+	oH2.onclick = function ()
+	{
+		var style = oUl.style;
+		style.display = style.display == "block" ? "none" : "block";
+		oH2.className = style.display == "block" ? "open" : ""
+	}
+}
+</script>
+</head>
+<body>
+<header>
+  <div class="tophead">
+    <div class="logo"><a href="/">BOOK+</a></div>
+    <div id="mnav">
+      <h2><span class="navicon"></span></h2>
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登录/注册</a></li>
+          {% else %}
+          <li><a href="login.html">{{ session.get('username')[:5] }},欢迎您！</a></li>
+          {% endif %}
+      </ul>
+    </div>
+    <nav class="topnav" id="topnav">
+      <ul>
+        <li><a href="index.html">网站首页</a></li>
+        <li><a href="bookrecommend.html">好书推荐</a></li>
+          <li><a href="allbook.html">所有图书</a></li>
+          <!--<li><a href="info.html">慢生活</a></li>-->
+          <!--<li><a href="gbook.html">留言</a></li>-->
+          <li><a href="about.html">关于我</a></li>
+          {% if session.get('user_id') == None %}
+          <li><a href="login.html">登陆/注册</a></li>
+          {% else %}
+          <li><a href="#">欢迎您！{{ session.get('username')[:5] }}</a> <a href="{{ url_for('users.logout') }}" style="color: red">【注销】</a></li>
+          {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>
+<article>
+  <h1 class="t_nav">不要轻易放弃。学习成长的路上，我们长路漫漫，只因学无止境。</h1>
+  <div class="blogs">
+      {% for book_info in books_info %}
+    <li> <span class="blogpic"><a href="{{ url_for('users.order_book', id=book_info['id']) }}"><img src="{{ url_for('static',filename='images/book_img/'+book_info['cover_img']) }}"></a></span>
+      <h3 class="blogtitle"><a href="{{ url_for('users.order_book', id=book_info['id']) }}">《{{ book_info['name'] }}》</a></h3>
+      <div class="bloginfo">
+        <p>{{ book_info['description'] }}</p>
+      </div>
+      <div class="autor"><span class="lm"><a href="/" title="CSS3|Html5" target="_blank" class="classname">{{ book_info['category_name'] }}</a></span><span class="dtime">价格：{{ book_info['price'] }}</span><span class="viewnum">浏览（<a href="/">0</a>）</span><span class="readmore"><a href="{{ url_for('users.order_book', id=book_info['id']) }}">查看详情</a></span></div>
+    </li>
+      {% endfor %}
+  <div class="pagelist">
+      <a title="Total record">&nbsp;<b>总共：{{ page_num }}&nbsp;页</b> </a>&nbsp;&nbsp;&nbsp;&nbsp;
+      {% if cur_page<2 %}
+      <a href="{{ url_for('users.allbook', cur_page=cur_page) }}">上一页</a>&nbsp;
+      {% endif %}
+      {% with foo = 1 %}
+            {% for page in range(1,page_num+foo) %}
+                {% if page == cur_page  %}
+      <span class="current">{{ cur_page }}</span>
+                {% else %}
+                <a href="{{ url_for('users.allbook', cur_page=page) }}">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if cur_page>=2 %}
+            <a href="{{ url_for('users.allbook', cur_page=cur_page+foo) }}">下一页</a>
+            {% endif %}
+            <a href="{{ url_for('users.allbook', cur_page=page_num) }}">尾页</a> {% endwith %}
+  </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="search">
+      <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
+        <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字'}" type="text">
+        <input name="show" value="title" type="hidden">
+        <input name="tempid" value="1" type="hidden">
+        <input name="tbname" value="news" type="hidden">
+        <input name="Submit" class="input_submit" value="搜索" type="submit">
+      </form>
+    </div>
+
+    <div class="cloud">
+      <h2 class="hometitle">文学泰斗</h2>
+      <ul>
+        <a href="/">莎士比亚</a> <a href="/"> 列夫·托尔斯泰</a> <a href="/">html5</a> <a href="/">李清照</a> <a href="/">雨果</a> <a href="/">荷马 </a> <a href="/">歌德</a> <a href="/">鲁迅</a><a href="/">安徒生</a> <a href="/">高尔基</a> <a href="/">狄更斯</a> <a href="/">马克吐温</a>
+      </ul>
+    </div>
+
+    <div class="weixin">
+      <h2 class="hometitle">店长微信</h2>
+      <ul>
+        <img src="../static/images/dzwx.jpg">
+      </ul>
+    </div>
+  </div>
+</article>
+<footer>
+  <p><a href="/">BOOK+ </a> <a href="/">西华大学-计算机与软件工程学院-数据库实训</a></p>
+</footer>
+<script src="js/nav.js"></script>
+</body>
+</html>
